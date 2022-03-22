@@ -6,6 +6,7 @@ def gitURL1 = "https://github.com/devopsbymat/DevOpsClassCodes.git"
 def branchName = "master"
 def sonarHome  = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
 def manageremail = "rahul.ganjare@gmail.com"
+def dockerpass = "Rahul#143"
 
 try{
 	stage('checkout'){
@@ -34,12 +35,12 @@ try{
     """
     
  	stage('Build-DockerImage'){
-        sh "sudo docker build /home/ubuntu/jenkins/workspace/${JOB_NAME} -t rganjaredocker/Tomcat_deply:latest"
+        sh "sudo docker build /home/ubuntu/jenkins/workspace/${JOB_NAME} -t rganjaredocker/tomcat_deploy:latest"
     }
 
     stage('Docker Push'){
           sh "sudo docker login --username rganjaredocker --password ${dockerpass}"
-          sh "sudo docker push rganjaredocker/devops-e2e:${imageTag}"
+          sh "sudo docker push rganjaredocker/tomcat_deploy:latest"
         }
 }
 catch (Exception e){
