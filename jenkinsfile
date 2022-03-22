@@ -16,8 +16,8 @@ parameters {
     password(name: 'dockerpass', defaultValue: 'Rahul#143', description: 'Enter docker login password ')
     }
 
-stages{
-    try{
+ try{
+ stages{
 	stage('checkout'){
         steps{
 	     checkout([$class: 'GitSCM', branches: [[name: "*/${branchName}"]], extensions: [], userRemoteConfigs: [[credentialsId: 'Github-credentials', url: 
@@ -59,7 +59,8 @@ stages{
           sh "sudo docker push rganjaredocker/Tomcat_deploy:latest"
         }
     }
-}
+  }
+ }
 catch (Exception e){
     currentBuild.result = "Failure"
     echo "Jenkins pipeline failed !! check logs"
@@ -67,5 +68,4 @@ catch (Exception e){
 finally {
     echo "jenkins job status for build url ${BUILD_URL}: ${currentBuild.result}"
 	}
- }
 }
