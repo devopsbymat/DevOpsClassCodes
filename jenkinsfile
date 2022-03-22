@@ -16,25 +16,30 @@ parameters {
     password(name: 'dockerpass', defaultValue: 'Rahul#143', description: 'Enter docker login password ')
     }
 
-try{
+stages{
+    try{
 	stage('checkout'){
-	    checkout([$class: 'GitSCM', branches: [[name: "*/${branchName}"]], extensions: [], userRemoteConfigs: [[credentialsId: 'Github-credentials', url: 
+        steps{
+	     checkout([$class: 'GitSCM', branches: [[name: "*/${branchName}"]], extensions: [], userRemoteConfigs: [[credentialsId: 'Github-credentials', url: 
 		"${gitURL1}"]]])
-	}
-	
+	    }
+    }
 	stage('build'){
-	    sh "mvn clean install"
-	
+        steps{
+	        sh "mvn clean install"
+        }
 	}
 	
 	stage('sonar scanner'){
-	   sh "${sonarHome}/bin/sonar-scanner"
-	
+        steps{
+	        sh "${sonarHome}/bin/sonar-scanner"
+        }
 	}
 	
 	stage('package'){
-	    sh "mvn package"
-	
+        steps{
+	        sh "mvn package"
+        }
 	}
 	
 	echo """
