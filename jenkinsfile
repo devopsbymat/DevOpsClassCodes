@@ -5,18 +5,17 @@ def branchName = "master"
 def sonarHome  = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
 def manageremail = "rahul.ganjare@gmail.com"
 
-pipeline{
-	agent{
-		node{
-			 label 'd-master'
-		}
-	}
-
-parameters {
-    password(name: 'dockerpass', defaultValue: 'Rahul#143', description: 'Enter docker login password ')
+pipeline {
+    agent {
+        node {
+            label 'd-master'
+        }
     }
+    parameters {
+        password(name: 'dockerpass', defaultValue: 'Rahul#143', description: 'Enter docker login password ')
+        }
 
- stages{
+stages{
 	stage('checkout'){
         steps{
 	     checkout([$class: 'GitSCM', branches: [[name: "*/${branchName}"]], extensions: [], userRemoteConfigs: [[credentialsId: 'Github-credentials', url: 
