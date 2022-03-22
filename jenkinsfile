@@ -16,7 +16,6 @@ parameters {
     password(name: 'dockerpass', defaultValue: 'Rahul#143', description: 'Enter docker login password ')
     }
 
- try{
  stages{
 	stage('checkout'){
         steps{
@@ -61,11 +60,3 @@ parameters {
     }
   }
  }
-catch (Exception e){
-    currentBuild.result = "Failure"
-    echo "Jenkins pipeline failed !! check logs"
-    }
-finally {
-    echo "jenkins job status for build url ${BUILD_URL}: ${currentBuild.result}"
-	}
-}
