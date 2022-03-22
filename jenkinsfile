@@ -11,6 +11,10 @@ def branchName = "master"
 def sonarHome  = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
 def manageremail = "rahul.ganjare@gmail.com"
 
+parameters {
+    password(name: 'dockerpass', defaultValue: 'Rahul#143', description: 'Enter docker login password ')
+    }
+    
 try{
 	stage('checkout'){
 	    checkout([$class: 'GitSCM', branches: [[name: "*/${branchName}"]], extensions: [], userRemoteConfigs: [[credentialsId: 'Github-credentials', url: 
@@ -39,14 +43,14 @@ try{
 
  	stage('Build-DockerImage'){
         steps {
-           sh "sudo docker build /home/ubuntu/jenkins/workspace/${JOB_NAME} -t rganjaredocker/Tomcat_deply:latest"
+           sh "sudo docker build /home/ubuntu/jenkins/workspace/${JOB_NAME} -t rganjaredocker/Tomcat_deploy:latest"
         }
     }
 
     stage('Docker Push'){
         steps {
           sh "sudo docker login --username rganjaredocker --password ${dockerpass}"
-          sh "sudo docker push rganjaredocker/devops-e2e:${imageTag}"
+          sh "sudo docker push rganjaredocker/Tomcat_deploy:latest"
         }
     }
 }
