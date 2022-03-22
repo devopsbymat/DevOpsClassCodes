@@ -1,56 +1,56 @@
 
+node('d-master'){
+
 def gitURL = "https://github.com/devopsbymat/SonarQubeCoverageJava.git"
 def gitURL1 = "https://github.com/devopsbymat/DevOpsClassCodes.git"
 def branchName = "master"
 def sonarHome  = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
 def manageremail = "rahul.ganjare@gmail.com"
 
-pipeline {
-    agent {
-        node {
-            label 'd-master'
-        }
-    }
-    parameters {
-        password(name: 'dockerpass', defaultValue: 'Rahul#143', description: 'Enter docker login password ')
-        }
-
-stages{
+try{
 	stage('checkout'){
-        steps{
-	     checkout([$class: 'GitSCM', branches: [[name: "*/${branchName}"]], extensions: [], userRemoteConfigs: [[credentialsId: 'Github-credentials', url: 
+	    checkout([$class: 'GitSCM', branches: [[name: "*/${branchName}"]], extensions: [], userRemoteConfigs: [[credentialsId: 'Github-credentials', url: 
 		"${gitURL1}"]]])
-	    }
-    }
+	}
+	
 	stage('build'){
-        steps{
-	        sh "mvn clean install"
-        }
+	    sh "mvn clean install"
+	
 	}
 	
 	stage('sonar scanner'){
-        steps{
-	        sh "${sonarHome}/bin/sonar-scanner"
-        }
+	   sh "${sonarHome}/bin/sonar-scanner"
+	
 	}
 	
 	stage('package'){
-        steps{
-	        sh "mvn package"
-        }
+	    sh "mvn package"
+	
 	}
-
+	
+	echo """
+      $JOB_NAME - Build # $BUILD_NUMBER - $NODE_NAME:
+      check console output at $BUILD_URL to approve deployment.
+    """
+    
  	stage('Build-DockerImage'){
         steps {
-           sh "sudo docker build /home/ubuntu/jenkins/workspace/${JOB_NAME} -t rganjaredocker/Tomcat_deploy:latest"
+           sh "sudo docker build /home/ubuntu/jenkins/workspace/${JOB_NAME} -t rganjaredocker/Tomcat_deply:latest"
         }
     }
 
     stage('Docker Push'){
         steps {
           sh "sudo docker login --username rganjaredocker --password ${dockerpass}"
-          sh "sudo docker push rganjaredocker/Tomcat_deploy:latest"
+          sh "sudo docker push rganjaredocker/devops-e2e:${imageTag}"
         }
     }
-  }
- }
+}
+catch (Exception e){
+    currentBuild.result = "Failure"
+    echo "Jenkins pipeline failed !! check logs"
+    }
+finally {
+    echo "jenkins job status for build url ${BUILD_URL}: ${currentBuild.result}"
+}
+}
