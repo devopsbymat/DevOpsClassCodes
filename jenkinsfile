@@ -34,17 +34,13 @@ try{
     """
     
  	stage('Build-DockerImage'){
-        steps {
-           sh "sudo docker build /home/ubuntu/jenkins/workspace/${JOB_NAME} -t rganjaredocker/Tomcat_deply:latest"
-        }
+        sh "sudo docker build /home/ubuntu/jenkins/workspace/${JOB_NAME} -t rganjaredocker/Tomcat_deply:latest"
     }
 
     stage('Docker Push'){
-        steps {
           sh "sudo docker login --username rganjaredocker --password ${dockerpass}"
           sh "sudo docker push rganjaredocker/devops-e2e:${imageTag}"
         }
-    }
 }
 catch (Exception e){
     currentBuild.result = "Failure"
