@@ -40,11 +40,6 @@ parameters {
 	        sh "mvn package"
         }
 	}
-	
-	echo """
-      $JOB_NAME - Build # $BUILD_NUMBER - $NODE_NAME:
-      check console output at $BUILD_URL to approve deployment.
-    """
 
  	stage('Build-DockerImage'){
         steps {
