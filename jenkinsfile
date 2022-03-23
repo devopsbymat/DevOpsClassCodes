@@ -15,6 +15,7 @@ try{
 	}
 	
 	stage('build'){
+        sh "ls -ltr"
 	    sh "mvn clean install"
 	
 	}
@@ -35,12 +36,12 @@ try{
     """
     
  	stage('Build-DockerImage'){
-        sh "sudo docker build /home/ubuntu/jenkins/workspace/${JOB_NAME} -t rganjaredocker/tomcat_deploy:latest"
+        sh "docker build -t rganjaredocker/tomcat_deploy:latest"
     }
 
     stage('Docker Login&Push'){
-          sh "sudo docker login --username rganjaredocker --password ${dockerpass}"
-          sh "sudo docker push rganjaredocker/tomcat_deploy:latest"
+          sh "docker login --username rganjaredocker --password ${dockerpass}"
+          sh "docker push rganjaredocker/tomcat_deploy:latest"
         }
 }
 catch (Exception e){
