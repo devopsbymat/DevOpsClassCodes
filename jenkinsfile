@@ -38,12 +38,12 @@ try{
  	stage('Build-DockerImage'){
         sh "cd /var/lib/jenkins/workspace/Tomcat-Deployment-pipeline"
         sh "pwd" 
-        sh "docker build . -t rganjaredocker/tomcat_deploy:latest"
+        sh "sudo docker build . -t rganjaredocker/tomcat_deploy:latest"
     }
 
     stage('Docker Login&Push'){
-          sh "docker login --username rganjaredocker --password ${dockerpass}"
-          sh "docker push rganjaredocker/tomcat_deploy:latest"
+          sh "sudo docker login --username rganjaredocker --password ${dockerpass}"
+          sh "sudo docker push rganjaredocker/tomcat_deploy:latest"
         }
 }
 catch (Exception e){
