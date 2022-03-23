@@ -38,7 +38,7 @@ try{
         sh "sudo docker build /home/ubuntu/jenkins/workspace/${JOB_NAME} -t rganjaredocker/tomcat_deploy:latest"
     }
 
-    stage('Docker Push'){
+    stage('Docker Login&Push'){
           sh "sudo docker login --username rganjaredocker --password ${dockerpass}"
           sh "sudo docker push rganjaredocker/tomcat_deploy:latest"
         }
