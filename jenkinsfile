@@ -1,5 +1,5 @@
 
-node('d-master'){
+node(){
 
 def gitURL = "https://github.com/devopsbymat/SonarQubeCoverageJava.git"
 def gitURL1 = "https://github.com/devopsbymat/DevOpsClassCodes.git"
